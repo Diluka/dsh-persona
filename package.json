@@ -1,7 +1,18 @@
 {
   "name": "dsh-persona",
   "version": "0.1.0",
-  "description": "Configurable coding collaboration style prompt and settings UI for DeepSeek Harness.",
+  "description": "Configurable coding collaboration style prompts and settings UI for DeepSeek Harness.",
+  "keywords": [
+    "deepseek-harness",
+    "dsh",
+    "dsh-plugin",
+    "cordis",
+    "persona",
+    "prompt",
+    "settings",
+    "codex",
+    "coding-agent"
+  ],
   "type": "module",
   "main": "lib/index.js",
   "types": "lib/types/index.d.ts",
