@@ -1,0 +1,6 @@
+# DSH bundle patch for dsh-persona.
+# Adds one host/client row: the host contributes a live system-prompt section and
+# settings namespace; the web client contributes the independent settings page.
+- insert:
+    - id: dsh-persona
+      name: dsh-persona
