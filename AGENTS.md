@@ -28,10 +28,11 @@ This repository is a DSH dual-end plugin package, not a standalone web app. Work
 
 ## Validation Commands
 
+- Use Node.js 22 or newer; CI should keep Node 22 as the minimum supported runtime.
 - Install dependencies for release/CI checks with `pnpm install --frozen-lockfile`.
 - Run static/project checks: `pnpm check`
 - Verify package contents without publishing: `pnpm pack:dry-run`
-- Keep `.github/workflows/ci.yml` aligned with these commands.
+- Keep `.github/workflows/ci.yml` aligned with these commands and include a tarball-installed `dsh web` smoke test.
 
 ## Testing Boundaries
 

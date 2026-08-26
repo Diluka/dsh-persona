@@ -17,6 +17,8 @@ The current UI intentionally does not include a final injected-prompt preview. U
 
 ## Install
 
+Requires Node.js 22 or newer, matching current DSH runtime support.
+
 Install the plugin into the DSH Web profile from the repository:
 
 ```sh
@@ -145,6 +147,8 @@ Verify package contents without publishing:
 ```sh
 pnpm pack:dry-run
 ```
+
+CI also packs the plugin, installs that tarball into a temporary DSH Web profile, starts `dsh web`, and fails if the server does not become reachable or exits early.
 
 Useful local validation flow:
 
