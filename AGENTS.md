@@ -28,8 +28,16 @@ This repository is a DSH dual-end plugin package, not a standalone web app. Work
 
 ## Validation Commands
 
+- Install dependencies for release/CI checks with `pnpm install --frozen-lockfile`.
 - Run static/project checks: `pnpm check`
 - Verify package contents without publishing: `pnpm pack:dry-run`
+- Keep `.github/workflows/ci.yml` aligned with these commands.
+
+## Testing Boundaries
+
+- Keep pure prompt/config logic covered by Node tests.
+- Cover host `apply()` wiring with small mocks for Cordis services and settings registration.
+- Use the existing DSH Web GUI for visible client behavior; do not treat a standalone Vite server as valid plugin evidence.
 
 ## GUI Validation
 

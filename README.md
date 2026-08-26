@@ -136,7 +136,7 @@ If runtime settings remain in the DSH settings store, they are inert once the pl
 Install dependencies and run the project checks:
 
 ```sh
-pnpm install
+pnpm install --frozen-lockfile
 pnpm check
 ```
 
