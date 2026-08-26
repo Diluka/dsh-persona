@@ -1,13 +1,20 @@
 import assert from "node:assert/strict";
 
 import {
+  PERSONA_CATALOG,
   PROMPT_SECTION,
   PROMPT_VARIABLE,
   PROMPT_ORDER,
   SETTINGS_NAMESPACE,
+  SettingsSchema,
   apply
 } from "../lib/index.js";
 import { PRESETS } from "../lib/persona.js";
+
+function schemaRootMeta(schema) {
+  const root = schema.refs[String(schema.uid)];
+  return root.meta;
+}
 
 const config = {
   enabled: true,
@@ -84,6 +91,8 @@ assert.deepEqual(sectionConfig, {
   text: `{{${PROMPT_VARIABLE}}}`
 });
 assert.equal(registration.ns, SETTINGS_NAMESPACE);
+assert.deepEqual(schemaRootMeta(SettingsSchema.toJSON()).extra.dshPersonaCatalog, PERSONA_CATALOG);
+assert.deepEqual(schemaRootMeta(registration.schema.toJSON()).extra.dshPersonaCatalog, PERSONA_CATALOG);
 assert.deepEqual(registration.options.base, config);
 assert.equal(settingsWatches.length, 1);
 assert.equal(effects.includes("dsh-persona.variable()"), true);

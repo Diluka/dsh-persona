@@ -1,7 +1,9 @@
 import assert from "node:assert/strict";
 
 import {
+  DEFAULT_PRESET,
   DEFAULT_SHARED_PROMPT,
+  PERSONA_CATALOG,
   PRESET_IDS,
   PRESETS,
   normalizeSettings,
@@ -28,7 +30,14 @@ assert.equal(
 );
 
 assert.deepEqual(PRESET_IDS, ["friendly", "pragmatic"]);
+assert.equal(DEFAULT_PRESET, "pragmatic");
 assert.deepEqual(Object.keys(PRESETS).sort(), ["friendly", "pragmatic"]);
+assert.deepEqual(PERSONA_CATALOG, {
+  defaultPreset: DEFAULT_PRESET,
+  defaultShared: DEFAULT_SHARED_PROMPT,
+  presetIds: PRESET_IDS,
+  presets: PRESETS
+});
 
 assert.equal(PRESETS.friendly.prompt.startsWith("# Style: Friendly"), true);
 assert.equal(PRESETS.pragmatic.prompt.startsWith("# Style: Pragmatic"), true);
