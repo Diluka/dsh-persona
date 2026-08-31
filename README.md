@@ -22,7 +22,7 @@ Requires Node.js 22 or newer, matching current DSH runtime support.
 Install the plugin into the DSH Web profile from the repository:
 
 ```sh
-dsh plugin --profile web add git@github.com:Diluka/dsh-persona.git
+dsh plugin --profile web add github:Diluka/dsh-persona
 ```
 
 Restart the DSH Web profile so the Cordis patch mounts the plugin, then open the existing DSH Web GUI.
