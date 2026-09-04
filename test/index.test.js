@@ -24,7 +24,6 @@ const config = {
 const resolved = { ...config };
 const effects = [];
 const rootDisposers = [];
-const settingsEffects = [];
 const settingsWatches = [];
 let variableProvider;
 let sectionConfig;
@@ -69,14 +68,12 @@ const ctx = {
     assert.deepEqual(keys, ["settings"]);
     callback({
       settings: {
-        register(ns, schema, options) {
-          registration = { ns, schema, options };
-          return scope;
+        installSection(owner, ns, schema, base, hooks) {
+          registration = { owner, ns, schema, base };
+          hooks.setSource(() => scope.get());
+          hooks.onChange();
+          scope.watch(() => hooks.onChange());
         }
-      },
-      effect(factory, label) {
-        settingsEffects.push(label);
-        return factory();
       }
     });
   }
@@ -90,15 +87,15 @@ assert.deepEqual(sectionConfig, {
   order: PROMPT_ORDER,
   text: `{{${PROMPT_VARIABLE}}}`
 });
+assert.equal(registration.owner, ctx);
 assert.equal(registration.ns, SETTINGS_NAMESPACE);
 assert.deepEqual(schemaRootMeta(SettingsSchema.toJSON()).extra.dshPersonaCatalog, PERSONA_CATALOG);
 assert.deepEqual(schemaRootMeta(registration.schema.toJSON()).extra.dshPersonaCatalog, PERSONA_CATALOG);
-assert.deepEqual(registration.options.base, config);
+assert.deepEqual(registration.base, config);
 assert.equal(settingsWatches.length, 1);
 assert.equal(effects.includes("dsh-persona.variable()"), true);
 assert.equal(effects.includes("dsh-persona.section()"), true);
 assert.equal(rootDisposers.length, 2);
-assert.equal(settingsEffects.length, 1);
 assert.equal(variableProvider(), `Shared guidance\n\n${PRESETS.friendly.prompt}`);
 
 resolved.enabled = false;
