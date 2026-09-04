@@ -9,7 +9,7 @@ permissions:
 
 env:
   PNPM_VERSION: "10.34.1"
-  DSH_VERSION: "0.1.1-rc.2"
+  DSH_VERSION: "0.1.2-rc.1"
 
 jobs:
   check:
@@ -73,7 +73,8 @@ jobs:
               sed -n '1,240p' "$log"
               exit 1
             fi
-            if curl -fsS "http://127.0.0.1:$port/" >"$RUNNER_TEMP/dsh-index.html" 2>/dev/null; then
+            url="$(awk '$1 == "dsh" && $2 == "web:" && $3 ~ /^https?:\/\// { print $3 }' "$log" | tail -n 1)"
+            if [[ -n "$url" ]] && curl -fsSL --cookie-jar "$RUNNER_TEMP/dsh-cookies.txt" "$url" >"$RUNNER_TEMP/dsh-index.html" 2>/dev/null; then
               sleep 2
               kill -0 "$pid"
               exit 0
