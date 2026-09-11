@@ -5,7 +5,7 @@ declare global {
   var __ModuleLoader__: {
     load(record: {
       id: string;
-      factory(require: (specifier: string) => unknown): unknown;
+      factory(require: (specifier: string) => unknown): Record<string, unknown>;
     }): void;
   };
 }

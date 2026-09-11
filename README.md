@@ -2,7 +2,7 @@
 
 `dsh-persona` is a DeepSeek Harness dual-end plugin that adds a configurable collaboration-style layer to model requests. It is built for people installing or using DSH Web, with a small settings page for choosing how the coding agent communicates.
 
-The plugin appends one style-oriented system prompt section after DSH's core identity and operating rules. It shapes tone, progress reporting, validation language, and collaboration habits; DSH still owns the core prompt, tool policy, safety rules, and runtime behavior.
+The plugin contributes one style-oriented system prompt section at order `5`, after DSH's core identity and deployment persona prefix. It shapes tone, progress reporting, validation language, and collaboration habits; DSH still owns the core prompt, tool policy, safety rules, and runtime behavior.
 
 ## What It Adds
 
@@ -17,7 +17,7 @@ The current UI intentionally does not include a final injected-prompt preview. U
 
 ## Install
 
-Requires Node.js 22 or newer, matching current DSH runtime support.
+Requires Node.js 22 or newer. The current compatibility baseline is DSH `0.1.5-rc.1` (npm `latest`); development dependencies and the CI Web smoke test are pinned to that version.
 
 Install the plugin into the DSH Web profile from the repository:
 
@@ -59,7 +59,7 @@ The dedicated page currently provides:
 - `shared`: edits the common prompt block applied before the style; this editor appears at the end.
 - reset action: restores the common prompt to the plugin default.
 
-Changes are stored through DSH settings and apply to subsequent model requests.
+Changes are stored through DSH settings and apply to subsequent model requests. If an agent preset registers a `complete` system-prompt section, DSH intentionally omits additional sections, including this style layer; the plugin does not bypass that preset contract.
 
 ## Runtime Storage
 
@@ -148,7 +148,9 @@ Verify package contents without publishing:
 pnpm pack:dry-run
 ```
 
-CI also packs the plugin, installs that tarball into a temporary DSH Web profile, starts `dsh web`, and fails if the server does not become reachable or exits early.
+Tests cover pure prompt logic, mocked Host wiring, and the pinned DSH's real Cordis, system-prompt, and settings services: live changes, disabling/resetting, optional-provider attach/detach, and unload cleanup. They also verify that shared text containing `{{...}}` stays literal and that complete-prompt presets retain control.
+
+CI also packs the plugin, installs that tarball into a temporary DSH Web profile, starts `dsh web`, and fails if the server does not become reachable or exits early. This smoke test proves package installation and server startup, not browser interaction.
 
 Useful local validation flow:
 
