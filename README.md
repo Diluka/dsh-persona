@@ -17,7 +17,7 @@ The current UI intentionally does not include a final injected-prompt preview. U
 
 ## Install
 
-Requires Node.js 22 or newer. The compatibility baseline is DSH `0.1.5-rc.2`; development dependencies and the CI Web smoke test are pinned to that version.
+Requires Node.js 22 or newer. The compatibility baseline is DSH `0.1.5-rc.2`, which matches the development dependencies. The CI Web smoke test uses DSH `0.1.5-rc.3` to check forward compatibility.
 
 Install the plugin into the DSH Web profile from the repository:
 
