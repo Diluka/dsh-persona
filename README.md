@@ -6,9 +6,9 @@ The plugin contributes one style-oriented system prompt section at order `5`, af
 
 ## What It Adds
 
-- A persistent `dsh-persona` settings namespace for this plugin's runtime options.
+- Profile-backed `dsh-persona` plugin settings for the enabled switch, selected style, and shared prompt.
 - A host-side system prompt section named `dsh-persona:style`.
-- A plugin configuration card for enabling or disabling the communication-style layer.
+- A `沟通风格` tab in DSH Settings -> Plugins for enabling or disabling the communication-style layer.
 - A DSH Web settings section that loads only while the layer is enabled.
 - Two built-in style options shown in Chinese: `友好协作` and `务实直接`.
 - An editable common prompt block that is prepended to the selected style.
@@ -17,7 +17,7 @@ The current UI intentionally does not include a final injected-prompt preview. U
 
 ## Install
 
-Requires Node.js 22 or newer. The compatibility baseline is DSH `0.1.5-rc.2`, which matches the development dependencies. The CI Web smoke test uses DSH `0.1.5-rc.3` to check forward compatibility.
+Requires Node.js 22 or newer. The compatibility baseline is DSH `0.1.7-rc.1`, matching the development dependencies. The CI Web smoke test uses the same release to verify package installation and startup.
 
 Install the plugin into the DSH Web profile from the repository:
 
@@ -38,7 +38,7 @@ dsh plugin --profile web add dsh-persona
 The master switch is in:
 
 ```text
-Settings -> 插件 -> dsh-persona
+Settings -> 插件 -> 沟通风格
 ```
 
 When `enabled` is off, the dedicated communication-style settings page is not registered and the prompt layer is not appended.
@@ -59,17 +59,11 @@ The dedicated page currently provides:
 - `shared`: edits the common prompt block applied before the style; this editor appears at the end.
 - reset action: restores the common prompt to the plugin default.
 
-Changes are stored through DSH settings and apply to subsequent model requests. If an agent preset registers a `complete` system-prompt section, DSH intentionally omits additional sections, including this style layer; the plugin does not bypass that preset contract.
+Changes are persisted through the selected profile's DSH Settings forms and apply to subsequent model requests. If an agent preset registers a `complete` system-prompt section, DSH intentionally omits additional sections, including this style layer; the plugin does not bypass that preset contract.
 
 ## Runtime Storage
 
-Runtime configuration is stored in the DSH settings namespace:
-
-```text
-dsh-persona
-```
-
-The namespace contains the user-facing options needed to render the prompt layer, including whether the layer is enabled, which style is selected, and the shared prompt text.
+Runtime options live in the profile's `dsh-persona` plugin entry and are edited through DSH Settings forms. The root Config is marked volatile so edits update the prompt layer without a restart.
 
 Composition defaults may still be supplied when mounting the plugin:
 
@@ -85,7 +79,7 @@ Composition defaults may still be supplied when mounting the plugin:
       - Keep the user clearly informed about ongoing actions without unnecessary detail.
 ```
 
-Settings saved from the Web page take effect at runtime through the same `dsh-persona` namespace.
+Settings-page edits persist to the selected profile's Cordis composition. Clearing an override restores the value inherited from the composition.
 
 ## Safety And Scope
 
@@ -116,10 +110,10 @@ This repository is a DSH plugin package, not a standalone web app.
 
 - Host entry: registers settings-backed runtime behavior and contributes the rendered `systemPrompt` section.
 - Prompt model: keeps shared/style rendering logic separate from DSH side effects.
-- Client entry: registers a `settings.section` UI inside DSH Web for the `dsh-persona` namespace.
+- Client entry: registers a `settings.section` UI inside DSH Web, reads the `dsh-persona` entry through `configForms`, and writes only volatile fields.
 - Profile patch: mounts the plugin into a DSH composition with optional defaults.
 
-At runtime the host reads settings, combines the common prompt block with the selected read-only style prompt, and appends the result as a style section for future model requests. The client writes settings only; it does not own prompt injection.
+At runtime the host reads the volatile plugin Config, combines the common prompt block with the selected read-only style prompt, and appends the result as a style section for future model requests. The client edits profile configuration only; it does not own prompt injection.
 
 ## Uninstall
 
@@ -131,7 +125,7 @@ dsh plugin --profile web remove dsh-persona
 
 Restart the DSH Web profile after removal so the composition no longer mounts the plugin.
 
-If runtime settings remain in the DSH settings store, they are inert once the plugin is removed. Reinstalling the plugin may reuse the existing `dsh-persona` namespace values depending on how the local DSH settings store is retained.
+The style options are part of the profile's plugin configuration rather than a separate runtime settings store. Any remaining composition defaults or overrides are governed by that profile's Cordis patch.
 
 ## Development And Verification
 
@@ -148,16 +142,16 @@ Verify package contents without publishing:
 pnpm pack:dry-run
 ```
 
-Tests cover pure prompt logic, mocked Host wiring, and the pinned DSH's real Cordis, system-prompt, and settings services: live changes, disabling/resetting, optional-provider attach/detach, and unload cleanup. They also verify that shared text containing `{{...}}` stays literal and that complete-prompt presets retain control.
+Tests cover pure prompt logic, mocked Host wiring, real Cordis/system-prompt registration, volatile Config resolution, settings-form policy cleanup, literal `{{...}}` text, and complete-prompt precedence.
 
-CI also packs the plugin, installs that tarball into a temporary DSH Web profile, starts `dsh web`, and fails if the server does not become reachable or exits early. This smoke test proves package installation and server startup, not browser interaction.
+CI packs the plugin, installs that tarball into a temporary DSH Web profile using DSH `0.1.7-rc.1`, starts `dsh web`, and fails if the server does not become reachable or exits early. This smoke test proves package installation and server startup, not browser interaction.
 
 Useful local validation flow:
 
 1. Install or link the plugin into a DSH Web profile.
 2. Restart that DSH profile so the Cordis patch is mounted.
 3. Open the existing DSH Web GUI, normally `http://127.0.0.1:3080`.
-4. Confirm `Settings -> 插件 -> dsh-persona` shows the master switch.
+4. Confirm `Settings -> 插件 -> 沟通风格` shows the master switch tab.
 5. Enable it and confirm `Settings -> 沟通风格` appears.
 6. Disable it and confirm the dedicated `沟通风格` page disappears.
 7. Re-enable it, choose a style, edit `shared`, then verify subsequent model requests reflect the style layer.

@@ -1,4 +1,5 @@
-import type { Context } from '@deepseek-ai/cordis';
+import type { Context, Volatile } from '@deepseek-ai/cordis';
+import type { SettingsForms } from '@deepseek-ai/dsh-settings';
 import type { SystemPrompt } from '@deepseek-ai/dsh-system-prompt';
 import type z from '@deepseek-ai/schemastery';
 
@@ -15,6 +16,8 @@ export interface PersonaSettings {
   preset: PersonaPreset;
   shared: string;
 }
+
+export type PersonaConfig = Volatile<PersonaSettings>;
 
 export interface PersonaDefinition {
   readonly label: string;
@@ -33,10 +36,11 @@ export interface PersonaCatalog {
 
 export interface PersonaContext extends Context {
   systemPrompt: SystemPrompt;
+  settings: SettingsForms;
 }
 
 export declare const name: 'dsh-persona';
-export declare const inject: ['systemPrompt'];
+export declare const inject: ['systemPrompt', 'settings'];
 export declare const SETTINGS_NAMESPACE: string;
 export declare const PROMPT_SECTION: 'dsh-persona:style';
 export declare const PROMPT_VARIABLE: 'persona_style_prompt';
@@ -47,9 +51,9 @@ export declare const DEFAULT_PRESET: PersonaPreset;
 export declare const DEFAULT_SHARED_PROMPT: string;
 export declare const PRESETS: PersonaCatalog['presets'];
 export declare const PERSONA_CATALOG: PersonaCatalog;
-export declare const SettingsSchema: z<PersonaSettings>;
-export declare const Config: z<PersonaSettings>;
+export declare const SettingsSchema: z<PersonaSettingsInput, PersonaConfig, 'volatile'>;
+export declare const Config: typeof SettingsSchema;
 
 export declare function normalizeSettings(value?: unknown): PersonaSettings;
 export declare function renderPersonaPrompt(value?: unknown): string;
-export declare function apply(ctx: PersonaContext, config: PersonaSettingsInput): void;
+export declare function apply(ctx: PersonaContext, config: PersonaConfig): void;
