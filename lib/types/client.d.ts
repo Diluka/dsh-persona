@@ -1,4 +1,4 @@
-export declare const inject: ['slots', 'locale', 'settingsScope'];
+export declare const inject: ['slots', 'locale', 'configForms'];
 export declare function apply(ctx: unknown): void;
 
 declare global {

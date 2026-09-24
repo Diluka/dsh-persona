@@ -9,7 +9,7 @@ permissions:
 
 env:
   PNPM_VERSION: "10.34.1"
-  DSH_VERSION: "0.1.5-rc.3"
+  DSH_VERSION: "0.1.7-rc.1"
 
 jobs:
   check:
