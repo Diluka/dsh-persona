@@ -6,10 +6,9 @@ The plugin contributes one style-oriented system prompt section at order `5`, af
 
 ## What It Adds
 
-- Profile-backed `dsh-persona` plugin settings for the enabled switch, selected style, and shared prompt.
+- Profile-backed `dsh-persona` plugin settings for the selected style and shared prompt.
 - A host-side system prompt section named `dsh-persona:style`.
-- A `沟通风格` tab in DSH Settings -> Plugins for enabling or disabling the communication-style layer.
-- A DSH Web settings section that loads only while the layer is enabled.
+- A DSH Web settings section for style configuration while the plugin row is running.
 - Two built-in style options shown in Chinese: `友好协作` and `务实直接`.
 - An editable common prompt block that is prepended to the selected style.
 
@@ -35,15 +34,7 @@ dsh plugin --profile web add dsh-persona
 
 ## Settings Page
 
-The master switch is in:
-
-```text
-Settings -> 插件 -> 沟通风格
-```
-
-When `enabled` is off, the dedicated communication-style settings page is not registered and the prompt layer is not appended.
-
-When enabled, open DSH Web and go to:
+Use the `dsh-persona` component row in the DSH Plugins manager to start or stop the plugin. While the row is running, open DSH Web and go to:
 
 ```text
 Settings -> 沟通风格
@@ -71,7 +62,6 @@ Composition defaults may still be supplied when mounting the plugin:
 - id: dsh-persona
   name: dsh-persona
   config:
-    enabled: true
     preset: pragmatic
     shared: |-
       # Work Presentation
@@ -102,7 +92,7 @@ The style selector adds a complete DSH-adapted Codex personality template:
 - `friendly` / `友好协作`: optimizes for team morale, supportive collaboration, pairing, onboarding, and gentle escalation.
 - `pragmatic` / `务实直接`: acts as a deeply pragmatic, effective DSH coding teammate with explicit reasoning, rigor, and concise tradeoff discussion.
 
-The plugin uses `enabled: false` for the no-style-layer case instead of exposing a third style option.
+The DSH component-row switch is the no-style-layer case; the plugin Config contains only the selected style and shared prompt.
 
 ## Architecture Overview
 
@@ -151,10 +141,9 @@ Useful local validation flow:
 1. Install or link the plugin into a DSH Web profile.
 2. Restart that DSH profile so the Cordis patch is mounted.
 3. Open the existing DSH Web GUI, normally `http://127.0.0.1:3080`.
-4. Confirm `Settings -> 插件 -> 沟通风格` shows the master switch tab.
-5. Enable it and confirm `Settings -> 沟通风格` appears.
-6. Disable it and confirm the dedicated `沟通风格` page disappears.
-7. Re-enable it, choose a style, edit `shared`, then verify subsequent model requests reflect the style layer.
+4. Confirm the DSH Plugins manager shows `dsh-persona` as running and `Settings -> 沟通风格` is available.
+5. Choose a style, edit `shared`, and verify subsequent model requests reflect the style layer.
+6. Disable the `dsh-persona` component row in the DSH Plugins manager and confirm the settings page and style layer disappear; re-enable the row to restore them.
 
 Do not validate this package by starting a replacement Vite server; DSH Web provides the runtime boot context for the plugin.
 
@@ -163,9 +152,8 @@ Do not validate this package by starting a replacement Vite server; DSH Web prov
 Included now:
 
 - global DSH style prompt layer;
-- settings-backed runtime configuration in `dsh-persona`;
-- DSH Web plugin configuration card with the master switch;
-- dedicated DSH Web settings section that loads only while enabled;
+- profile-backed `preset` and `shared` configuration in `dsh-persona`;
+- dedicated DSH Web settings section while the component row is running;
 - DSH-style custom dropdown for choosing a style;
 - editable common prompt block with reset;
 - read-only `friendly` and `pragmatic` style prompts;

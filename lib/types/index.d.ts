@@ -6,13 +6,11 @@ import type z from '@deepseek-ai/schemastery';
 export type PersonaPreset = 'friendly' | 'pragmatic';
 
 export interface PersonaSettingsInput {
-  enabled?: boolean;
   preset?: PersonaPreset;
   shared?: string;
 }
 
 export interface PersonaSettings {
-  enabled: boolean;
   preset: PersonaPreset;
   shared: string;
 }

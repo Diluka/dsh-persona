@@ -10,13 +10,7 @@ import {
 } from "../lib/index.js";
 import { PRESETS } from "../lib/persona.js";
 
-function schemaRootMeta(schema) {
-  const root = schema.refs[String(schema.uid)];
-  return root.meta;
-}
-
 const resolved = {
-  enabled: true,
   preset: "friendly",
   shared: "Shared guidance"
 };
@@ -64,15 +58,19 @@ assert.deepEqual(sectionConfig, {
   text: `{{${PROMPT_VARIABLE}}}`
 });
 assert.deepEqual(settingsPresentation, { presentation: { auto: false }, owner: ctx.fiber });
-assert.deepEqual(schemaRootMeta(SettingsSchema.toJSON()).extra.dshPersonaCatalog, PERSONA_CATALOG);
-assert.equal(schemaRootMeta(SettingsSchema.toJSON()).volatile, true);
+const settingsSchema = SettingsSchema.toJSON();
+const settingsRoot = settingsSchema.refs[String(settingsSchema.uid)];
+assert.deepEqual(Object.keys(settingsRoot.dict).sort(), ["preset", "shared"]);
+assert.deepEqual(settingsRoot.meta.extra.dshPersonaCatalog, PERSONA_CATALOG);
+assert.equal(settingsRoot.meta.volatile, true);
 assert.equal(effects.includes("dsh-persona.variable()"), true);
 assert.equal(effects.includes("dsh-persona.section()"), true);
 assert.equal(effects.includes("dsh-persona.settingsForm()"), true);
 assert.equal(rootDisposers.length, 3);
 assert.equal(variableProvider(), `Shared guidance\n\n${PRESETS.friendly.prompt}`);
 
-resolved.enabled = false;
-assert.equal(variableProvider(), "");
+resolved.preset = "pragmatic";
+resolved.shared = "Updated guidance";
+assert.equal(variableProvider(), `Updated guidance\n\n${PRESETS.pragmatic.prompt}`);
 for (const dispose of rootDisposers) dispose();
 assert.equal(settingsPresentation, undefined);

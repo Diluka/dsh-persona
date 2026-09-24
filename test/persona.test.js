@@ -11,13 +11,11 @@ import {
 } from "../lib/persona.js";
 
 assert.deepEqual(normalizeSettings(), {
-  enabled: true,
   preset: "pragmatic",
   shared: DEFAULT_SHARED_PROMPT
 });
 
 assert.equal(normalizeSettings({ preset: "unknown" }).preset, "pragmatic");
-assert.equal(renderPersonaPrompt({ enabled: false }), "");
 
 assert.equal(
   renderPersonaPrompt({ preset: "friendly" }),
