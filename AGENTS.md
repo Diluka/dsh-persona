@@ -17,6 +17,7 @@ This repository is a DSH dual-end plugin package, not a standalone web app. Work
 - Do not push commits or branches unless the user explicitly asks.
 - Do not edit running dynamic Cordis plugins unless the user specifically asks for a live preview.
 - Keep changes minimal and scoped to the requested plugin behavior.
+- Bump the plugin's own semantic version when code changes; changing only the `-dsh.` compatibility suffix is not a version bump.
 
 ## Custom UI Component Style
 
