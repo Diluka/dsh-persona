@@ -16,7 +16,7 @@ The current UI intentionally does not include a final injected-prompt preview. U
 
 ## Install
 
-Requires Node.js 22 or newer. The compatibility baseline is DSH `0.1.7-rc.1`, matching the development dependencies. The CI Web smoke test uses the same release to verify package installation and startup.
+Requires Node.js 22 or newer. The compatibility baseline is DSH `0.2.0-rc.2`, matching the development dependencies. The CI Web smoke test uses the same release to verify package installation and startup.
 
 Install the plugin into the DSH Web profile from the repository:
 
@@ -134,7 +134,7 @@ pnpm pack:dry-run
 
 Tests cover pure prompt logic, mocked Host wiring, real Cordis/system-prompt registration, volatile Config resolution, settings-form policy cleanup, literal `{{...}}` text, and complete-prompt precedence.
 
-CI packs the plugin, installs that tarball into a temporary DSH Web profile using DSH `0.1.7-rc.1`, starts `dsh web`, and fails if the server does not become reachable or exits early. This smoke test proves package installation and server startup, not browser interaction.
+CI packs the plugin, installs that tarball into a temporary DSH Web profile using DSH `0.2.0-rc.2`, starts `dsh web`, and fails if the server does not become reachable or exits early. This smoke test proves package installation and server startup, not browser interaction.
 
 Useful local validation flow:
 
