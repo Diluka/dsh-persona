@@ -57,6 +57,21 @@ test("complete-prompt presets retain authority over additional style sections", 
   assert.equal(renderPrompt(await ctx.get("systemPrompt").assemble()), "Complete preset");
 });
 
+test("omitted shared config uses the catalog default with either built-in style", async (t) => {
+  const { defaultShared, presetIds, presets } = persona.PERSONA_CATALOG;
+  for (const preset of presetIds) {
+    await t.test(preset, async (t) => {
+      const ctx = await setup(t);
+      const fiber = await ctx.plugin(persona, { preset });
+      assert.equal(fiber.config.get().shared, defaultShared);
+      assert.equal(
+        renderPrompt(await ctx.get("systemPrompt").assemble()),
+        `You are an AI agent powered by DeepSeek Harness.\n\nCore guidance\n\n${defaultShared}\n\n${presets[preset].prompt}`
+      );
+    });
+  }
+});
+
 test("settings form policy disables generated forms and unregisters on unload", async (t) => {
   const ctx = await setup(t);
   const config = { preset: "pragmatic", shared: "Composition default" };

@@ -2,7 +2,7 @@
 
 `dsh-persona` is a DeepSeek Harness dual-end plugin that adds a configurable collaboration-style layer to model requests. It is built for people installing or using DSH Web, with a small settings page for choosing how the coding agent communicates.
 
-The plugin contributes one style-oriented system prompt section at order `5`, after DSH's core identity and deployment persona prefix. It shapes tone, progress reporting, validation language, and collaboration habits; DSH still owns the core prompt, tool policy, safety rules, and runtime behavior.
+The plugin contributes one collaboration-oriented system prompt section at order `5`, after DSH's core identity and deployment persona prefix. It guides task ownership, evidence-based work, progress reporting, and tone; DSH still owns the core prompt, tool policy, safety rules, and runtime behavior.
 
 ## What It Adds
 
@@ -48,7 +48,7 @@ The dedicated page currently provides:
 - style selector: uses a DSH-style dropdown trigger instead of the browser's native select control.
 - style prompt preview: shows the complete read-only style prompt directly after the selector.
 - `shared`: edits the common prompt block applied before the style; this editor appears at the end.
-- reset action: restores the common prompt to the plugin default.
+- reset action: restores the inherited common prompt (the plugin default unless the composition supplies one); save to apply it.
 
 Changes are persisted through the selected profile's DSH Settings forms and apply to subsequent model requests. If an agent preset registers a `complete` system-prompt section, DSH intentionally omits additional sections, including this style layer; the plugin does not bypass that preset contract.
 
@@ -76,7 +76,7 @@ Settings-page edits persist to the selected profile's Cordis composition. Cleari
 `dsh-persona` is a style layer, not a control plane for agent behavior.
 
 - It appends one additional system-prompt section; it does not replace DSH's core prompt.
-- It focuses on communication style, collaboration tone, progress updates, validation summaries, and next-step wording.
+- It guides completing authorized work, asking focused questions, using evidence, validating changes, and communicating results.
 - It does not implement memory, preference learning, chat history distillation, or long-term user profiling.
 - It does not grant tools, change sandbox or approval policy, or widen file/network access.
 - Built-in style text is read-only so installed behavior remains predictable; users customize the shared block instead.
@@ -85,12 +85,22 @@ The effective authority remains with DSH's host composition, active agent config
 
 ## Styles
 
-The default common prompt is a larger Codex-style output guidance block rewritten for DSH. It covers concise teammate tone, concrete progress updates, command-output summaries, validation status, and natural next steps while preserving DSH-specific wording.
+The default common prompt encourages Codex-like collaboration habits using DSH's available tools and interaction features:
 
-The style selector adds a complete DSH-adapted Codex personality template:
+- Carry implementation requests through inspection, changes, relevant checks, and a clear result; respect question, review, and planning-only requests.
+- Make routine, reversible decisions from context and keep working within existing authorization. Ask when a consequential choice or required approval is unresolved.
+- Preserve the objective and completed work across follow-ups; recover from failures using evidence and report real blockers.
+- Inspect relevant source, batch independent work when supported, keep changes scoped, and preserve unrelated user edits.
+- Give concise progress updates and distinguish completed work, observed validation results, and remaining uncertainty.
 
-- `friendly` / `友好协作`: optimizes for team morale, supportive collaboration, pairing, onboarding, and gentle escalation.
-- `pragmatic` / `务实直接`: acts as a deeply pragmatic, effective DSH coding teammate with explicit reasoning, rigor, and concise tradeoff discussion.
+The style selector changes tone while retaining the same shared work guidance:
+
+- `friendly` / `友好协作`: warm, patient explanations and approachable collaboration, without routine praise or extra confirmation steps.
+- `pragmatic` / `务实直接`: direct conclusions, concrete recommendations, and concise discussion of relevant tradeoffs.
+
+These prompts guide behavior; they do not reproduce Codex's runtime or guarantee the same model performance. DSH's active mode, tool availability, and approval rules continue to apply.
+
+An explicitly configured `shared` value, including an empty string, is preserved when upgrading. Profiles without a `shared` value use the new default automatically. For a profile with a saved override, retain any custom instructions you still need, then use `恢复默认共通提示词` (Reset shared prompt) in `Settings -> 沟通风格` and save. Reset restores the inherited composition value, falling back to the installed plugin's default; if the composition itself supplies an older `shared` block, update or remove that composition value to adopt the new default.
 
 The DSH component-row switch is the no-style-layer case; the plugin Config contains only the selected style and shared prompt.
 

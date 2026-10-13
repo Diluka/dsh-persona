@@ -27,6 +27,18 @@ assert.equal(
   true
 );
 
+// Upgrades must preserve explicit shared text, including an intentionally blank block.
+for (const preset of PRESET_IDS) {
+  assert.equal(
+    renderPersonaPrompt({ preset, shared: "Custom collaboration rules" }),
+    `Custom collaboration rules\n\n${PRESETS[preset].prompt}`
+  );
+  for (const shared of ["", " \n\t "]) {
+    assert.equal(normalizeSettings({ preset, shared }).shared, shared);
+    assert.equal(renderPersonaPrompt({ preset, shared }), PRESETS[preset].prompt);
+  }
+}
+
 assert.deepEqual(PRESET_IDS, ["friendly", "pragmatic"]);
 assert.equal(DEFAULT_PRESET, "pragmatic");
 assert.deepEqual(Object.keys(PRESETS).sort(), ["friendly", "pragmatic"]);

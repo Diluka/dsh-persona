@@ -1,6 +1,6 @@
 {
   "name": "dsh-persona",
-  "version": "0.4.1-dsh.0.2.0-rc.2",
+  "version": "0.4.2-dsh.0.2.0-rc.2",
   "description": "Configurable coding collaboration style prompts and settings UI for DeepSeek Harness.",
   "keywords": [
     "deepseek-harness",
